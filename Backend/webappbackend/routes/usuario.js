@@ -1,13 +1,12 @@
 var express = require('express');
 
 var router = express.Router();
-/*router.get('/', function(req, res, next) {
-    res.send('respond with a client');
-});*/
+var autenticar  = require('../middleware/autenticar');
+
 
 var { crearUsuario, obtenerUsuario,login } = require('../controllers/usuariocontroller');
 
-router.get('/me', obtenerUsuario); 
+router.get('/me', autenticar,obtenerUsuario); 
 router.post('/login', login); 
 router.post('/register', crearUsuario);
 
