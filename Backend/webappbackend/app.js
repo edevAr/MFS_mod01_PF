@@ -5,6 +5,8 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const tareaRoutes = require('./routes/tarea'); 
+const usuarioRoutes = require('./routes/usuario');
 
 var app = express();
 
@@ -16,5 +18,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use('/api/tasks', tareaRoutes);  
+app.use('/api/auth', usuarioRoutes);
+ 
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
 
 module.exports = app;
