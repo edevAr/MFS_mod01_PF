@@ -7,9 +7,20 @@ const {Tarea} = require('../models');
     };
     exports.obtenerTareasDeUnUsuario = async (req, res) => 
     { 
-        const { userId } = req.params;
-        const tareas = await Tarea.findByFk(userId); 
-        res.json(tareas);
+      console.log('tareas de un usuario');
+      try{
+        const  usuarioId  = req.usuario.id;
+        const tareas = await Tarea.findAll({
+          where: {usuarioId},
+        });
+        if(!tareas){
+            return res.status(404).json({ mensaje: 'No tiene tareas' });
+        }else{
+            return res.status(200).json(tareas);
+        }
+      }catch(error){
+          return res.status(500).json({ mensaje: 'Error al obtener las tareas', error });
+      }
     };
     exports.ObtenerUnaTarea = async (req, res) => 
         { 
