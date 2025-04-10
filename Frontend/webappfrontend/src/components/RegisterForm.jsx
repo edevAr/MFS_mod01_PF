@@ -5,9 +5,52 @@ const RegisterForm = ({ onRegister, onSwitchToLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const validateName = (name) => {
+    const regex = /^[a-zA-Z\s]+$/;
+    return regex.test(name);
+  };
+
+  const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|-]).{8,}$/;
+    return regex.test(password);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister({ name, email, password });
+
+    let isValid = true;
+    const newErrors = { name: "", email: "", password: "" };
+
+    if (!validateName(name)) {
+      newErrors.name = "El nombre solo debe contener letras y espacios.";
+      isValid = false;
+    }
+    if (!validateEmail(email)) {
+      newErrors.email = "Por favor ingrese un correo electrónico válido.";
+      isValid = false;
+    }
+    if (!validatePassword(password)) {
+      newErrors.password =
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    if (isValid) {
+      onRegister({ name, email, password });
+    }
   };
 
   return (
@@ -26,6 +69,7 @@ const RegisterForm = ({ onRegister, onSwitchToLogin }) => {
             onChange={(e) => setName(e.target.value)}
             required
           />
+          {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -39,6 +83,7 @@ const RegisterForm = ({ onRegister, onSwitchToLogin }) => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
         <div className="mb-6">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700">
@@ -52,8 +97,12 @@ const RegisterForm = ({ onRegister, onSwitchToLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
-        <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md">
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white py-2 rounded-md"
+        >
           Crear cuenta
         </button>
       </form>

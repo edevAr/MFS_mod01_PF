@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Task from "./Task";
 import Header from "./Header";
 
-const TasksList = () => {
+const TasksList = ({ onLogout }) => {
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -51,9 +51,9 @@ const TasksList = () => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6">
-      <Header nombre={nombreUsuario} avatarUrl={avatarUrl} />
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-semibold">Mis Tareas</h2>
+      {/* Header con botón */}
+      <div className="flex justify-between items-center mb-4">
+        <Header nombre={nombreUsuario} avatarUrl={avatarUrl} onLogout={onLogout}/>
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
           onClick={() => setMostrarModal(true)}
@@ -63,7 +63,8 @@ const TasksList = () => {
       </div>
 
       {/* Filtro */}
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex items-center justify-end gap-2">
+        <label className="text-sm font-medium">Filtrar Tarea Por:</label>
         <select
           className="p-2 border rounded-md"
           value={filtroEstado}
@@ -76,62 +77,61 @@ const TasksList = () => {
         </select>
       </div>
 
+      {/* Modal para nueva tarea */}
       {mostrarModal && (
-  <div
-    className="fixed inset-0 backdrop-blur-md bg-black/30 flex items-center justify-center z-50"
-    onClick={() => setMostrarModal(false)}
-  >
-    <div
-      className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md"
-      onClick={(e) => e.stopPropagation()} // Evita cerrar al hacer clic dentro
-    >
-      <h3 className="text-lg font-bold mb-4">Crear Nueva Tarea</h3>
-
-      <div className="mb-3">
-        <label className="block text-sm font-medium">Descripción</label>
-        <input
-          type="text"
-          value={nuevaTarea.descripcion}
-          onChange={(e) =>
-            setNuevaTarea({ ...nuevaTarea, descripcion: e.target.value })
-          }
-          className="w-full border rounded p-2"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Fecha de caducidad</label>
-        <input
-          type="date"
-          value={nuevaTarea.fechaCaducidad}
-          onChange={(e) =>
-            setNuevaTarea({ ...nuevaTarea, fechaCaducidad: e.target.value })
-          }
-          className="w-full border rounded p-2"
-        />
-      </div>
-
-      <div className="flex justify-end gap-2">
-        <button
-          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        <div
+          className="fixed inset-0 backdrop-blur-md bg-black/30 flex items-center justify-center z-50"
           onClick={() => setMostrarModal(false)}
         >
-          Cancelar
-        </button>
-        <button
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          onClick={handleAgregarTarea}
-        >
-          Guardar
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+          <div
+            className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold mb-4">Crear Nueva Tarea</h3>
 
+            <div className="mb-3">
+              <label className="block text-sm font-medium">Descripción</label>
+              <input
+                type="text"
+                value={nuevaTarea.descripcion}
+                onChange={(e) =>
+                  setNuevaTarea({ ...nuevaTarea, descripcion: e.target.value })
+                }
+                className="w-full border rounded p-2"
+              />
+            </div>
 
+            <div className="mb-4">
+              <label className="block text-sm font-medium">Fecha de caducidad</label>
+              <input
+                type="date"
+                value={nuevaTarea.fechaCaducidad}
+                onChange={(e) =>
+                  setNuevaTarea({ ...nuevaTarea, fechaCaducidad: e.target.value })
+                }
+                className="w-full border rounded p-2"
+              />
+            </div>
 
-      {/* Lista */}
+            <div className="flex justify-end gap-2">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                onClick={() => setMostrarModal(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                onClick={handleAgregarTarea}
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Lista de tareas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {tareasFiltradas.map((task) => (
           <Task

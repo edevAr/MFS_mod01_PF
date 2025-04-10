@@ -38,6 +38,11 @@ const AuthForm = () => {
     
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false); // Volver a la pantalla de login
+  };
+  
+
   const handleRegister = (userData) => {
     console.log("Registrar usuario con:", userData);
   };
@@ -53,7 +58,7 @@ const AuthForm = () => {
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
       {isLoggedIn ? (
-        <TasksList /> // Si el usuario está logueado, mostrar las tareas
+        <TasksList onLogout={handleLogout}/> // Si el usuario está logueado, mostrar las tareas
       ) : isLogin ? (
         <LoginForm onLogin={handleLogin} onSwitchToRegister={switchToRegister} />
       ) : (
