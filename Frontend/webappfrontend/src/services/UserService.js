@@ -42,8 +42,7 @@ export const iniciarSesion = async (correo, contrasenia) => {
   const body = { correo, contrasenia };
   return await request('/api/auth/login', 'POST', body);
 };
-export const me = async (correo, contrasenia) => {
-  const body = { correo, contrasenia };
-  return await request('/api/auth/login', 'POST', body);
+export const obtenerUsuario = async () => {
+  return await request('/api/auth/me', 'GET');
 };
 

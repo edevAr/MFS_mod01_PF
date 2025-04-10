@@ -1,29 +1,48 @@
 import React, { useState } from "react";
+import {actualizarTarea } from "../services/TaskService"; 
 
-const Task = ({ descripcion, estado, fechaCaducidad }) => {
+const Task = ({ id, titulo, descripcion, estado, fechaCaducidad, onDelete }) => {
   const [taskState, setTaskState] = useState(estado || "Pendiente");
   const [editMode, setEditMode] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(titulo);
   const [editedDescripcion, setEditedDescripcion] = useState(descripcion);
   const [editedFecha, setEditedFecha] = useState(fechaCaducidad);
 
-  // Función para manejar el cambio de estado
+  const formatearFecha = (fecha) => {
+    const d = new Date(fecha);
+    const pad = (n) => (n < 10 ? '0' + n : n);
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  };
+
   const handleStateChange = (event) => {
     setTaskState(event.target.value);
   };
 
-  // Función para manejar el cambio de descripción
+  const handleTituloChange = (event) => {
+    setEditedTitle(event.target.value);
+  };
+
   const handleDescripcionChange = (event) => {
     setEditedDescripcion(event.target.value);
   };
 
-  // Función para manejar el cambio de fecha de caducidad
   const handleFechaChange = (event) => {
     setEditedFecha(event.target.value);
   };
 
-  // Función para guardar los cambios
-  const saveChanges = () => {
-    // Aquí podrías enviar los cambios al backend o almacenarlos en un estado global
+  const saveChanges = async() => {
+    const usuarioId = sessionStorage.getItem('currentUserId');
+    setEditMode(false);
+    const tareaActualizada = await actualizarTarea(id, editedTitle, editedDescripcion, taskState, editedFecha, usuarioId);
+    console.log('Tarea actualizada ',tareaActualizada);
+    
+  };
+
+  const discardChanges = () => {
+    setEditedTitle(titulo);
+    setEditedDescripcion(descripcion);
+    setEditedFecha(fechaCaducidad);
+    setTaskState(estado);
     setEditMode(false);
   };
 
@@ -33,20 +52,26 @@ const Task = ({ descripcion, estado, fechaCaducidad }) => {
         <>
           <input
             type="text"
+            value={editedTitle}
+            onChange={handleTituloChange}
+            className="text-2xl font-semibold mb-2 w-full p-2 border border-gray-300 rounded-md"
+          />
+          <input
+            type="text"
             value={editedDescripcion}
             onChange={handleDescripcionChange}
-            className="text-xl font-semibold mb-2 w-full p-2 border border-gray-300 rounded-md"
+            className="text-base font-semibold mb-2 w-full p-2 border border-gray-300 rounded-md"
           />
           <div className="mb-4 flex items-center">
             <label className="text-sm text-gray-600 mr-4">Estado:</label>
             <select
               value={taskState}
               onChange={handleStateChange}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-sm bg-transparent text-gray-700 border border-gray-200 rounded px-2 py-1 focus:outline-none"
             >
               <option value="Pendiente">Pendiente</option>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
+              <option value="En Progreso">En Progreso</option>
+              <option value="Completada">Completada</option>
             </select>
           </div>
           <input
@@ -55,49 +80,53 @@ const Task = ({ descripcion, estado, fechaCaducidad }) => {
             onChange={handleFechaChange}
             className="text-sm text-gray-600 mb-4 p-2 border border-gray-300 rounded-md w-full"
           />
-          <button
-            onClick={saveChanges}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-          >
-            Guardar Cambios
-          </button>
+          <div className="mt-4 flex justify-end space-x-4">
+            <button
+              onClick={() => {
+                saveChanges();
+              }}
+              
+              className="text-blue-600 text-sm hover:underline focus:outline-none"
+            >
+              Guardar cambios
+            </button>
+            <button
+              onClick={discardChanges}
+              className="text-gray-500 text-sm hover:underline focus:outline-none"
+            >
+              Descartar
+            </button>
+          </div>
         </>
       ) : (
         <>
-          <h3 className="text-xl font-semibold mb-2">{editedDescripcion}</h3>
+          <h3 className="text-2xl font-semibold mb-2">{editedTitle}</h3>
+          <p className="text-base mb-2">{editedDescripcion}</p>
           <div className="mb-4 flex items-center">
             <label className="text-sm text-gray-600 mr-4">Estado:</label>
             <select
               value={taskState}
               disabled
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-sm bg-transparent text-gray-700 border border-gray-200 rounded px-2 py-1 focus:outline-none"
             >
               <option value="Pendiente">Pendiente</option>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
+              <option value="En Progreso">En Progreso</option>
+              <option value="Completada">Completada</option>
             </select>
           </div>
-          <p className="text-sm text-gray-600">Fecha de caducidad: {editedFecha}</p>
-          <div className="mt-4">
+          <p className="text-sm text-gray-600">Fecha limite: {formatearFecha(editedFecha)}</p>
+          <div className="mt-4 flex justify-end space-x-4">
             <button
               onClick={() => setEditMode(true)}
-              className="text-blue-500 hover:underline"
+              className="text-blue-600 text-sm hover:underline focus:outline-none"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-6 h-6 inline"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 2L21 10M21 10L13 18M21 10H3"
-                />
-              </svg>
               Editar
+            </button>
+            <button
+              onClick={() => onDelete(id)}
+              className="text-red-600 text-sm hover:underline focus:outline-none"
+            >
+              Eliminar
             </button>
           </div>
         </>
