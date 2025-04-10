@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 
 const LoginForm = ({ onLogin, onSwitchToRegister }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [correo, setCorreo] = useState("");
+  const [contrasenia, setContrasenia] = useState("");
 
   const handleSubmit = (e) => {
+    console.log("viene aqui")
     e.preventDefault();
-    onLogin({ email, password });
+    onLogin({ correo, contrasenia });
   };
 
   return (
@@ -21,8 +22,8 @@ const LoginForm = ({ onLogin, onSwitchToRegister }) => {
             type="email"
             id="email"
             className="w-full p-2 mt-1 border rounded-md border-gray-300"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={correo}
+            onChange={(e) => setCorreo(e.target.value)}
             required
           />
         </div>
@@ -34,8 +35,8 @@ const LoginForm = ({ onLogin, onSwitchToRegister }) => {
             type="password"
             id="password"
             className="w-full p-2 mt-1 border rounded-md border-gray-300"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={contrasenia}
+            onChange={(e) => setContrasenia(e.target.value)}
             required
           />
         </div>

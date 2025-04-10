@@ -2,15 +2,40 @@ import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import TasksList from "./TasksList";
+import { iniciarSesion } from "../services/UserService";
+import Toast from "../utils/Toast";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState('');
+  const [type, setType] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
-  const handleLogin = (credentials) => {
+  const handleLogin =  async (credentials) => {
     console.log("Iniciar sesión con:", credentials);
-    // Simulación de inicio de sesión correcto
-    setIsLoggedIn(true);
+    try {
+      const response = await iniciarSesion(credentials.correo, credentials.contrasenia);
+      console.log('la respuesta es: ', response.token);
+      if(response.token){
+        setIsLoggedIn(true);
+        console.log(response);
+        setMensaje('Inicio de sesión exitoso');
+      }else{
+        console.log('else');
+        setMessage('¡Hubo un error al hacer la solicitud!');
+        setType('error');
+        setShowToast(true);
+      }
+      // Aquí podrías redirigir al usuario a otra página, si es necesario
+    } catch (error) {
+      csetMessage('¡Hubo un error al hacer la solicitud!');
+      setType('error');
+      setShowToast(true);
+      console.log(error)
+      //setMensaje('Error al iniciar sesión');
+    }
+    
   };
 
   const handleRegister = (userData) => {
