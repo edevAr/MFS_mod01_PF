@@ -1,4 +1,5 @@
 var express = require('express');
+const cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -9,6 +10,12 @@ const tareaRoutes = require('./routes/tarea');
 const usuarioRoutes = require('./routes/usuario');
 
 var app = express();
+
+app.use(cors({
+    origin: 'http://localhost:5173',  // Permite solicitudes desde tu frontend
+    methods: 'GET,POST,PUT,DELETE',  // Métodos permitidos
+    allowedHeaders: 'Content-Type, Authorization'  // Cabeceras permitidas
+  }));
 
 app.use(logger('dev'));
 app.use(express.json());
