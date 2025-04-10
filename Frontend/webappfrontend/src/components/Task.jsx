@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {actualizarTarea } from "../services/TaskService"; 
 
-const Task = ({ id, titulo, descripcion, estado, fechaCaducidad, onDelete }) => {
+const formatearFecha = (fecha) => {
+  const d = new Date(fecha);
+  const pad = (n) => (n < 10 ? '0' + n : n);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate()+1)}`;
+};
+
+const Task = ({ id, titulo, descripcion, estado, fechalimite, onDelete }) => {
+  console.log('cargando el componente ====', id, titulo, fechalimite);
   const [taskState, setTaskState] = useState(estado || "Pendiente");
   const [editMode, setEditMode] = useState(false);
   const [editedTitle, setEditedTitle] = useState(titulo);
   const [editedDescripcion, setEditedDescripcion] = useState(descripcion);
-  const [editedFecha, setEditedFecha] = useState(fechaCaducidad);
+  const [editedFecha, setEditedFecha] = useState(formatearFecha(fechalimite));
 
-  const formatearFecha = (fecha) => {
-    const d = new Date(fecha);
-    const pad = (n) => (n < 10 ? '0' + n : n);
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  };
+  /*useEffect(() => {
+    console.log('Fecha de edición actualizada:', editedFecha);
+  }, [editedFecha]);*/
+  
+
+  
 
   const handleStateChange = (event) => {
     setTaskState(event.target.value);
@@ -32,16 +40,16 @@ const Task = ({ id, titulo, descripcion, estado, fechaCaducidad, onDelete }) => 
 
   const saveChanges = async() => {
     const usuarioId = sessionStorage.getItem('currentUserId');
+    console.log('fecha de porra', id, editedTitle, editedDescripcion, taskState, editedFecha, usuarioId);
     setEditMode(false);
     const tareaActualizada = await actualizarTarea(id, editedTitle, editedDescripcion, taskState, editedFecha, usuarioId);
-    console.log('Tarea actualizada ',tareaActualizada);
-    
+    console.log('la tarea actualizada es: ', tareaActualizada);
   };
 
   const discardChanges = () => {
     setEditedTitle(titulo);
     setEditedDescripcion(descripcion);
-    setEditedFecha(fechaCaducidad);
+    setEditedFecha(fechalimite);
     setTaskState(estado);
     setEditMode(false);
   };
@@ -114,7 +122,7 @@ const Task = ({ id, titulo, descripcion, estado, fechaCaducidad, onDelete }) => 
               <option value="Completada">Completada</option>
             </select>
           </div>
-          <p className="text-sm text-gray-600">Fecha limite: {formatearFecha(editedFecha)}</p>
+          <p className="text-sm text-gray-600">Fecha limite: {editedFecha}</p>
           <div className="mt-4 flex justify-end space-x-4">
             <button
               onClick={() => setEditMode(true)}

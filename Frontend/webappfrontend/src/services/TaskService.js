@@ -32,8 +32,9 @@ const request = async (endpoint, method = 'GET', body = null) => {
 };
 
 // Crear tarea (POST)
-export const crearTarea = async (titulo, descripcion, estado, fechaLimite, usuarioId) => {
-  const body = { titulo, descripcion, estado, fechaLimite, usuarioId };
+export const crearTarea = async (titulo, descripcion, estado, fechalimite, usuarioId) => {
+  const body = { titulo, descripcion, estado, fechalimite, usuarioId };
+  console.log('La fecha que esta mandando', body);
   return await request('/api/tasks', 'POST', body);
 };
 
@@ -46,6 +47,7 @@ export const eliminarTarea = async (id) => {
 };
 export const actualizarTarea = async (id, titulo, descripcion, estado, fechaLimite, usuarioId) => {
   const body = { titulo, descripcion, estado, fechaLimite, usuarioId };
+  console.log('la fecha que le enviare', fechaLimite);
   return await request(`/api/tasks/${id}`, 'PUT', body);
 };
 

@@ -13,7 +13,7 @@ const TasksList = ({ onLogout }) => {
   const [nuevaTarea, setNuevaTarea] = useState({
     descripcion: "",
     estado: "Pendiente",
-    fechaCaducidad: "",
+    fechalimite: "",
   });
 
   useEffect(() => {
@@ -23,7 +23,6 @@ const TasksList = ({ onLogout }) => {
         // Obtener usuario
         const usuario = await obtenerUsuario();
         if (usuario) {
-          console.log('el usuario es:', usuario);
           sessionStorage.setItem('currentUserId', usuario.id);
           setNombreUsuario(usuario.nombre);
           setAvatarUrl(usuario.avatarUrl);
@@ -31,7 +30,6 @@ const TasksList = ({ onLogout }) => {
 
         // Obtener tareas
         const tareas = await obtenerTareas();
-        console.log('estos son las tareas', tareas);
         setTasks(tareas);
       } catch (error) {
         console.error("Error al cargar los datos", error);
@@ -52,16 +50,14 @@ const TasksList = ({ onLogout }) => {
       id: Date.now(),
     };
     setTasks([...tasks, nueva]);
-    setNuevaTarea({ descripcion: "", estado: "Pendiente", fechaCaducidad: "" });
+    setNuevaTarea({ descripcion: "", estado: "Pendiente", fechalimite: "" });
     setMostrarModal(false);
-
-    const tarea = await crearTarea(nueva.titulo, nueva.descripcion, nueva.estado, nueva.fechaCaducidad, usuarioId);
-    console.log('tarea creada', tarea);
+    //console.log('=== TAREA ==', nueva);
+    //console.log('**** NUEVA *****', nuevaTarea);
+    const tarea = await crearTarea(nueva.titulo, nueva.descripcion, nueva.estado, nueva.fechalimite, usuarioId);
   };
   const removerTarea = async (id) => {
     const tareaEliminada = await eliminarTarea(id);
-    console.log(tareaEliminada);
-    console.log('vino a eliminiar', id)
     const nuevasTareas = tareasFiltradas.filter((tarea) => tarea.id !== id);
     setTasks(nuevasTareas);
   };
@@ -130,12 +126,12 @@ const TasksList = ({ onLogout }) => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium">Fecha de caducidad</label>
+              <label className="block text-sm font-medium">Fecha Limite</label>
               <input
                 type="date"
-                value={nuevaTarea.fechaCaducidad}
+                value={nuevaTarea.fechalimite}
                 onChange={(e) =>
-                  setNuevaTarea({ ...nuevaTarea, fechaCaducidad: e.target.value })
+                  setNuevaTarea({ ...nuevaTarea, fechalimite: e.target.value })
                 }
                 className="w-full border rounded p-2"
               />
@@ -168,7 +164,7 @@ const TasksList = ({ onLogout }) => {
             titulo={task.titulo}
             descripcion={task.descripcion}
             estado={task.estado}
-            fechaCaducidad={task.fechalimite}
+            fechalimite={task.fechalimite}
             onDelete={(id)=> removerTarea(id)}
           />
         ))}
