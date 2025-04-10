@@ -31,19 +31,14 @@ const request = async (endpoint, method = 'GET', body = null) => {
   }
 };
 
-// Crear un usuario (POST)
-export const crearUsuario = async (nombre, correo, contrasenia) => {
-  const body = { nombre, correo, contrasenia };
-  return await request('/api/auth/register', 'POST', body);
+// Crear tarea (POST)
+export const crearTarea = async (titulo, descripcion, estado, fechaLimite) => {
+  const body = { titulo, descripcion, estado, fechaLimite };
+  return await request('/api/tasks', 'POST', body);
 };
 
 // Iniciar sesión (POST)
-export const iniciarSesion = async (correo, contrasenia) => {
-  const body = { correo, contrasenia };
-  return await request('/api/auth/login', 'POST', body);
-};
-export const me = async (correo, contrasenia) => {
-  const body = { correo, contrasenia };
-  return await request('/api/auth/login', 'POST', body);
+export const ObtenerTareas = async () => {
+  return await request('/api/tasks/', 'GET');
 };
 

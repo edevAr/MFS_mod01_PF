@@ -5,7 +5,6 @@ const LoginForm = ({ onLogin, onSwitchToRegister }) => {
   const [contrasenia, setContrasenia] = useState("");
 
   const handleSubmit = (e) => {
-    console.log("viene aqui")
     e.preventDefault();
     onLogin({ correo, contrasenia });
   };

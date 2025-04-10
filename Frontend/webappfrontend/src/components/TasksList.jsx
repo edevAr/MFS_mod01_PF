@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Task from "./Task";
 import Header from "./Header";
+import { me } from "../services/UserService";
+import { crearTarea, ObtenerTareas } from "../services/TaskService";
 
 const TasksList = ({ onLogout }) => {
   const [tasks, setTasks] = useState([
