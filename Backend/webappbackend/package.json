@@ -2,7 +2,9 @@
   "name": "webappbackend",
   "version": "0.0.0",
   "private": true,
+  "main": "app.js",
   "scripts": {
+    "build": "tsc",
     "start": "node ./bin/www"
   },
   "dependencies": {

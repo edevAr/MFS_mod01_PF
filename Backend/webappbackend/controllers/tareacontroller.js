@@ -2,6 +2,7 @@ const {Tarea} = require('../models');
     
     exports.crearTarea = async (req, res) => 
     { 
+        console.log('fecha que llega', req.body);
         const tarea = await Tarea.create(req.body); 
         res.status(201).json(tarea);
     };
