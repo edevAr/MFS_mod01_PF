@@ -1,6 +1,6 @@
 // src/services/apiService.js
 
-const API_BASE_URL = 'http://localhost:3001'; // URL base de la API
+const API_BASE_URL = 'https://mfs-mod01-pf.onrender.com'; // URL base de la API
 
 // Función para manejar las solicitudes HTTP
 const request = async (endpoint, method = 'GET', body = null) => {
