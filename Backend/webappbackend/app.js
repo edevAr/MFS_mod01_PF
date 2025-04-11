@@ -13,7 +13,7 @@ const usuarioRoutes = require('./routes/usuario');
 var app = express();
 
 app.use(cors({
-    origin: 'https://mfs-mod01-pf.vercel.app/',  // Permite solicitudes desde tu frontend
+    origin: 'https://mfs-mod01-pf.vercel.app',  // Permite solicitudes desde tu frontend
     methods: 'GET,POST,PUT,DELETE',  // Métodos permitidos
     allowedHeaders: 'Content-Type, Authorization'  // Cabeceras permitidas
   }));
