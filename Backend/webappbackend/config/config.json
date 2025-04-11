@@ -14,10 +14,10 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "root",
-    "password": "eden",
-    "database": "proyecto_final",
-    "host": "127.0.0.1",
+    "username": "pfdb_zfvp_user",
+    "password": "i3vRc3fVvA91IEfzT2gBAqE2ACEDlktT",
+    "database": "pfdb_zfvp",
+    "host": "dpg-cvsmesbuibrs73ebj2sg-a.oregon-postgres.render.com",
     "dialect": "postgres"
   }
 }
