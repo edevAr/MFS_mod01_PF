@@ -18,6 +18,12 @@
     "password": "i3vRc3fVvA91IEfzT2gBAqE2ACEDlktT",
     "database": "pfdb_zfvp",
     "host": "dpg-cvsmesbuibrs73ebj2sg-a.oregon-postgres.render.com",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }
